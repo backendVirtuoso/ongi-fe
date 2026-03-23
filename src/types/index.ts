@@ -15,6 +15,8 @@ export interface Quote {
   category: Category
   sourceType: 'MANUAL' | 'AI'
   likeCount: number
+  isLiked: boolean
+  isSaved: boolean
   createdAt: string
 }
 
@@ -29,6 +31,38 @@ export interface SubscribeResponse {
   email: string
   status: string
   message: string
+}
+
+export interface SubscriberMe {
+  subscriberId: number
+  email: string
+  name: string | null
+  status: string
+  preferredCategories: Category[]
+}
+
+export interface TokenResponse {
+  accessToken: string
+  subscriberId: number
+  email: string
+}
+
+export interface InteractionResponse {
+  quoteId: number
+  isLiked: boolean
+  isSaved: boolean
+  likeCount: number
+}
+
+export interface AIQuoteRequest {
+  situation: string
+  category: Category
+}
+
+export interface AIQuoteResponse {
+  quote: string
+  category: Category
+  sourceType: string
 }
 
 export interface ApiResponse<T> {
