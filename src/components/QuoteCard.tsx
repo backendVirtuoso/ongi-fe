@@ -1,12 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 import type { Quote } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { useAuth } from '@/contexts/AuthContext'
-import MagicLinkModal from '@/components/MagicLinkModal'
 import { quoteApi } from '@/lib/api'
+
+// bundle-dynamic-imports: 모달은 조건부로만 렌더링되므로 지연 로딩
+const MagicLinkModal = dynamic(() => import('@/components/MagicLinkModal'))
 
 const CATEGORY_COLORS = {
   COMFORT: 'bg-rose-100 text-rose-600',
@@ -30,7 +33,8 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState<'like' | 'save' | null>(null)
 
-  async function handleLike() {
+  // rerender-memo: useCallback으로 안정적인 핸들러 참조 유지
+  const handleLike = useCallback(async () => {
     if (!isLoggedIn) { setShowModal(true); return }
     if (loading) return
     setLoading('like')
@@ -40,9 +44,9 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
     } finally {
       setLoading(null)
     }
-  }
+  }, [isLoggedIn, loading, quote.quoteId])
 
-  async function handleSave() {
+  const handleSave = useCallback(async () => {
     if (!isLoggedIn) { setShowModal(true); return }
     if (loading) return
     setLoading('save')
@@ -52,7 +56,7 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
     } finally {
       setLoading(null)
     }
-  }
+  }, [isLoggedIn, loading, quote.quoteId])
 
   return (
     <>

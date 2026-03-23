@@ -11,11 +11,17 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    quoteApi
-      .getToday()
-      .then((res) => setQuote(res.data))
-      .catch(() => setQuote(null))
-      .finally(() => setLoading(false))
+    async function fetchToday() {
+      try {
+        const res = await quoteApi.getToday()
+        setQuote(res.data)
+      } catch {
+        setQuote(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchToday()
   }, [])
 
   return (

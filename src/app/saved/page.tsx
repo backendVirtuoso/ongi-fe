@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { quoteApi } from '@/lib/api'
 import { useAuth } from '@/contexts/AuthContext'
@@ -13,17 +13,24 @@ export default function SavedPage() {
   const [quotes, setQuotes] = useState<Quote[]>([])
   const [loading, setLoading] = useState(true)
 
+  const fetchSaved = useCallback(async () => {
+    try {
+      const res = await quoteApi.getSaved()
+      setQuotes(res.data)
+    } catch {
+      setQuotes([])
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     if (!isLoggedIn) {
       router.replace('/')
       return
     }
-    quoteApi
-      .getSaved()
-      .then((res) => setQuotes(res.data))
-      .catch(() => setQuotes([]))
-      .finally(() => setLoading(false))
-  }, [isLoggedIn])
+    fetchSaved()
+  }, [isLoggedIn, router, fetchSaved])
 
   if (loading) {
     return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { quoteApi } from '@/lib/api'
 import GalleryGrid from '@/components/GalleryGrid'
 import CategoryFilter from '@/components/CategoryFilter'
@@ -17,17 +17,23 @@ export default function GalleryPage() {
     setPage(0)
   }, [category])
 
-  useEffect(() => {
+  // async-api-routes: useCallback으로 안정적인 fetch 함수 참조 유지
+  const fetchQuotes = useCallback(async () => {
     setLoading(true)
-    quoteApi
-      .getByCategory(category, page)
-      .then((res) => {
-        setQuotes(res.data.content)
-        setTotalPages(res.data.totalPages)
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
+    try {
+      const res = await quoteApi.getByCategory(category, page)
+      setQuotes(res.data.content)
+      setTotalPages(res.data.totalPages)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [category, page])
+
+  useEffect(() => {
+    fetchQuotes()
+  }, [fetchQuotes])
 
   return (
     <div className="space-y-8">

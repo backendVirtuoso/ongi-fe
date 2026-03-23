@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import type { Category } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 
@@ -10,7 +11,8 @@ interface CategoryFilterProps {
   onChange: (category: Category) => void
 }
 
-export default function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
+// rerender-memo: props가 바뀌지 않으면 리렌더 스킵
+function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
   return (
     <div className="flex gap-2 flex-wrap">
       {CATEGORIES.map((cat) => (
@@ -32,3 +34,5 @@ export default function CategoryFilter({ selected, onChange }: CategoryFilterPro
     </div>
   )
 }
+
+export default memo(CategoryFilter)

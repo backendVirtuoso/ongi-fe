@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { subscriberApi } from '@/lib/api'
 import { useAuth } from '@/contexts/AuthContext'
@@ -28,17 +28,20 @@ export default function MyPage() {
 
   useEffect(() => {
     if (!isLoggedIn) { router.replace('/'); return }
-    subscriberApi.getMe().then((res) => {
+    async function fetchMe() {
+      const res = await subscriberApi.getMe()
       setMe(res.data)
       setSelected(res.data.preferredCategories as Category[])
-    })
-  }, [isLoggedIn])
+    }
+    fetchMe()
+  }, [isLoggedIn, router])
 
-  function toggleCategory(cat: Category) {
+  // rerender-memo: useCallback으로 안정적인 핸들러 참조 유지
+  const toggleCategory = useCallback((cat: Category) => {
     setSelected((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     )
-  }
+  }, [])
 
   async function handleSave() {
     setSaving(true)

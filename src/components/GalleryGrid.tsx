@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { Quote } from '@/types'
 import QuoteCard from './QuoteCard'
 
@@ -5,7 +6,8 @@ interface GalleryGridProps {
   quotes: Quote[]
 }
 
-export default function GalleryGrid({ quotes }: GalleryGridProps) {
+// rerender-memo: props가 바뀌지 않으면 리렌더 스킵
+function GalleryGrid({ quotes }: GalleryGridProps) {
   if (quotes.length === 0) {
     return (
       <div className="text-center py-20 text-stone-400">
@@ -23,3 +25,5 @@ export default function GalleryGrid({ quotes }: GalleryGridProps) {
     </div>
   )
 }
+
+export default memo(GalleryGrid)

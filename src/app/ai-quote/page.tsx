@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 import { quoteApi } from '@/lib/api'
 import type { AIQuoteResponse, Category } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { useAuth } from '@/contexts/AuthContext'
-import MagicLinkModal from '@/components/MagicLinkModal'
+
+// bundle-dynamic-imports: 모달은 조건부로만 렌더링되므로 지연 로딩
+const MagicLinkModal = dynamic(() => import('@/components/MagicLinkModal'))
 
 const CATEGORIES: Category[] = ['COMFORT', 'CHEER', 'ENCOURAGE', 'SUPPORT']
 
