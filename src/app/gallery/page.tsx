@@ -44,22 +44,15 @@ export default function GalleryPage() {
 
       <CategoryFilter selected={category} onChange={setCategory} />
 
-      {loading ? (
-        <div className="text-center py-20 text-stone-400">
-          <p className="text-4xl mb-3">🌤</p>
-          <p>불러오는 중...</p>
-        </div>
-      ) : (
-        <GalleryGrid quotes={quotes} />
-      )}
+      <GalleryGrid quotes={quotes} loading={loading} />
 
-      {totalPages > 1 && (
+      {!loading && totalPages > 1 && (
         <div className="flex justify-center gap-2 pt-4">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
               onClick={() => setPage(i)}
-              className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
+              className={`w-8 h-8 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 page === i
                   ? 'bg-orange-400 text-white'
                   : 'bg-stone-100 text-stone-600 hover:bg-stone-200'

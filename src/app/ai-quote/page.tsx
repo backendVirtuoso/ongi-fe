@@ -7,11 +7,12 @@ import { quoteApi } from '@/lib/api'
 import type { AIQuoteResponse, Category } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { useAuth } from '@/contexts/AuthContext'
+import { SparklesIcon, CopyIcon, CheckIcon, BookmarkIcon } from '@/components/icons'
 
 // bundle-dynamic-imports: 모달은 조건부로만 렌더링되므로 지연 로딩
 const MagicLinkModal = dynamic(() => import('@/components/MagicLinkModal'))
 
-const CATEGORIES: Category[] = ['COMFORT', 'CHEER', 'ENCOURAGE', 'SUPPORT']
+const CATEGORIES: Category[] = ['COMFORT', 'CHEER', 'ENCOURAGE', 'SUPPORT', 'CELEBRATE', 'LOVE']
 
 const CATEGORY_COLORS: Record<Category, string> = {
   COMFORT: 'border-rose-300 bg-rose-50 text-rose-600',
@@ -84,7 +85,7 @@ export default function AIQuotePage() {
               maxLength={300}
               rows={4}
               placeholder="예: 오늘 면접에서 떨어졌어요. 많이 속상하고 자신감이 없어졌어요."
-              className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm text-stone-700 resize-none focus:outline-none focus:ring-2 focus:ring-orange-300"
+              className="w-full px-4 py-3 rounded-xl border border-stone-200 text-sm text-stone-700 resize-none focus:outline-none focus:ring-2 focus:ring-orange-300 transition-shadow"
             />
             <p className="text-xs text-stone-400 text-right mt-1">{situation.length}/300</p>
           </div>
@@ -97,7 +98,7 @@ export default function AIQuotePage() {
                   key={cat}
                   type="button"
                   onClick={() => setCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150 cursor-pointer ${
                     category === cat
                       ? CATEGORY_COLORS[cat]
                       : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'
@@ -112,14 +113,17 @@ export default function AIQuotePage() {
           <button
             type="submit"
             disabled={loading || !situation.trim()}
-            className="w-full py-3.5 rounded-xl bg-orange-400 text-white font-semibold hover:bg-orange-500 transition-colors disabled:opacity-60"
+            className="w-full py-3.5 rounded-xl bg-orange-400 text-white font-semibold hover:bg-orange-500 transition-colors duration-150 disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
           >
-            {loading ? '문장 생성 중...' : '✨ 문장 생성하기'}
+            <SparklesIcon className="w-4 h-4" />
+            {loading ? '문장 생성 중...' : '문장 생성하기'}
           </button>
         </form>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-50 text-red-600 text-sm">{error}</div>
+          <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm">
+            {error}
+          </div>
         )}
 
         {result && (
@@ -137,20 +141,25 @@ export default function AIQuotePage() {
               {result.quote}
             </p>
 
-            <div className="flex items-center gap-3 pt-2 border-t border-stone-50">
+            <div className="flex items-center gap-3 pt-2 border-t border-stone-100">
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-600 transition-colors"
+                className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer ${
+                  copied ? 'text-emerald-500' : 'text-stone-400 hover:text-stone-600'
+                }`}
               >
-                <span>{copied ? '✅' : '📋'}</span>
+                {copied
+                  ? <CheckIcon className="w-4 h-4" />
+                  : <CopyIcon className="w-4 h-4" />
+                }
                 <span>{copied ? '복사됨' : '복사'}</span>
               </button>
               {!isLoggedIn && (
                 <button
                   onClick={() => setShowModal(true)}
-                  className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-orange-500 transition-colors"
+                  className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-orange-500 transition-colors duration-150 cursor-pointer"
                 >
-                  <span>🔖</span>
+                  <BookmarkIcon className="w-4 h-4" />
                   <span>저장하기</span>
                 </button>
               )}

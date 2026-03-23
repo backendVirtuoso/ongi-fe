@@ -6,6 +6,7 @@ import { authApi } from '@/lib/api'
 import { authStorage } from '@/lib/auth'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { MailIcon } from '@/components/icons'
 
 export default function LoginPage() {
   const { isLoggedIn } = useAuth()
@@ -59,7 +60,7 @@ export default function LoginPage() {
                 placeholder="이메일 주소"
                 required
                 autoFocus
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 transition-shadow"
               />
               {status === 'error' && (
                 <p className="text-xs text-red-500">{errorMessage}</p>
@@ -67,7 +68,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full py-3 rounded-xl bg-orange-400 text-white text-sm font-semibold hover:bg-orange-500 transition-colors disabled:opacity-60"
+                className="w-full py-3 rounded-xl bg-orange-400 text-white text-sm font-semibold hover:bg-orange-500 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
               >
                 {status === 'loading' ? '발송 중...' : '로그인 링크 받기'}
               </button>
@@ -75,14 +76,16 @@ export default function LoginPage() {
 
             <p className="text-xs text-stone-400 text-center">
               아직 구독 전이라면?{' '}
-              <Link href="/unsubscribe" className="text-orange-400 hover:underline">
+              <Link href="/unsubscribe" className="text-orange-400 hover:underline cursor-pointer">
                 구독 신청하기
               </Link>
             </p>
           </>
         ) : (
           <div className="text-center space-y-4 py-4">
-            <p className="text-4xl">📬</p>
+            <div className="w-14 h-14 bg-orange-50 rounded-full flex items-center justify-center mx-auto">
+              <MailIcon className="w-7 h-7 text-orange-400" />
+            </div>
             <h2 className="text-lg font-bold text-stone-800">이메일을 확인해주세요</h2>
             <p className="text-sm text-stone-500 leading-relaxed">
               <strong className="text-stone-700">{email}</strong>로<br />
@@ -91,7 +94,7 @@ export default function LoginPage() {
             </p>
             <button
               onClick={() => { setStatus('idle'); setEmail('') }}
-              className="w-full py-3 rounded-xl bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition-colors"
+              className="w-full py-3 rounded-xl bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition-colors cursor-pointer"
             >
               다른 이메일로 다시 받기
             </button>

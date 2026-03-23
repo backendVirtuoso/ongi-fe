@@ -6,6 +6,7 @@ import { useSubscribe } from '@/hooks/useSubscribe'
 import Link from 'next/link'
 import type { Category } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
+import { SunIcon, CheckIcon, MailIcon } from '@/components/icons'
 
 type Tab = 'subscribe' | 'unsubscribe'
 type UnsubStatus = 'idle' | 'loading' | 'success' | 'error'
@@ -26,8 +27,10 @@ function SubscribeTab() {
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl bg-orange-50 border border-orange-100 p-8 text-center">
-        <p className="text-2xl mb-2">🌤</p>
+      <div className="rounded-2xl bg-orange-50 border border-orange-100 p-8 text-center space-y-3">
+        <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
+          <SunIcon className="w-7 h-7 text-orange-400" />
+        </div>
         <p className="text-stone-700 font-medium">{message}</p>
       </div>
     )
@@ -41,14 +44,14 @@ function SubscribeTab() {
         placeholder="이메일 주소"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white"
+        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white transition-shadow"
       />
       <input
         type="text"
         placeholder="이름 (선택)"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white"
+        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white transition-shadow"
       />
       <div>
         <p className="text-sm text-stone-500 mb-2">선호 카테고리 (선택)</p>
@@ -58,7 +61,7 @@ function SubscribeTab() {
               key={cat}
               type="button"
               onClick={() => toggleCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 cursor-pointer ${
                 preferredCategories.includes(cat)
                   ? 'bg-orange-400 text-white'
                   : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
@@ -73,7 +76,7 @@ function SubscribeTab() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full py-3 rounded-xl bg-orange-400 hover:bg-orange-500 text-white font-semibold transition-colors disabled:opacity-60"
+        className="w-full py-3 rounded-xl bg-orange-400 hover:bg-orange-500 text-white font-semibold transition-colors duration-150 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
       >
         {status === 'loading' ? '신청 중...' : '하루 두 번 온기 받기'}
       </button>
@@ -105,10 +108,15 @@ function UnsubscribeTab() {
   if (status === 'success') {
     return (
       <div className="text-center space-y-4 py-4">
-        <p className="text-4xl">🍂</p>
+        <div className="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center mx-auto">
+          <MailIcon className="w-7 h-7 text-stone-400" />
+        </div>
         <p className="font-semibold text-stone-800">구독 해지 완료</p>
-        <p className="text-stone-500 text-sm">{message}</p>
-        <Link href="/" className="inline-block mt-2 px-5 py-2.5 rounded-xl bg-stone-200 text-stone-700 text-sm font-semibold hover:bg-stone-300 transition-colors">
+        <p className="text-stone-500 text-sm leading-relaxed">{message}</p>
+        <Link
+          href="/"
+          className="inline-block mt-2 px-5 py-2.5 rounded-xl bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition-colors cursor-pointer"
+        >
           홈으로 가기
         </Link>
       </div>
@@ -123,13 +131,13 @@ function UnsubscribeTab() {
         placeholder="구독 이메일 주소"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 bg-white"
+        className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 bg-white transition-shadow"
       />
       {status === 'error' && <p className="text-sm text-red-500">{message}</p>}
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full py-3 rounded-xl bg-stone-700 hover:bg-stone-800 text-white font-semibold transition-colors disabled:opacity-60"
+        className="w-full py-3 rounded-xl bg-stone-700 hover:bg-stone-800 text-white font-semibold transition-colors duration-150 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {status === 'loading' ? '처리 중...' : '구독 해지하기'}
       </button>
@@ -151,7 +159,7 @@ export default function SubscriptionPage() {
       <div className="flex bg-stone-100 rounded-xl p-1">
         <button
           onClick={() => setTab('subscribe')}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer ${
             tab === 'subscribe'
               ? 'bg-white text-stone-800 shadow-sm'
               : 'text-stone-500 hover:text-stone-700'
@@ -161,7 +169,7 @@ export default function SubscriptionPage() {
         </button>
         <button
           onClick={() => setTab('unsubscribe')}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 cursor-pointer ${
             tab === 'unsubscribe'
               ? 'bg-white text-stone-800 shadow-sm'
               : 'text-stone-500 hover:text-stone-700'

@@ -6,6 +6,8 @@ import { subscriberApi } from '@/lib/api'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Category, SubscriberMe } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
+import { CheckIcon } from '@/components/icons'
+import SkeletonCard from '@/components/SkeletonCard'
 
 const ALL_CATEGORIES: Category[] = ['COMFORT', 'CHEER', 'ENCOURAGE', 'SUPPORT', 'CELEBRATE', 'LOVE']
 
@@ -24,7 +26,7 @@ export default function MyPage() {
   const [me, setMe] = useState<SubscriberMe | null>(null)
   const [selected, setSelected] = useState<Category[]>([])
   const [saving, setSaving] = useState(false)
-  const [saveMessage, setSaveMessage] = useState('')
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   useEffect(() => {
     if (!isLoggedIn) { router.replace('/'); return }
@@ -45,19 +47,29 @@ export default function MyPage() {
 
   async function handleSave() {
     setSaving(true)
-    setSaveMessage('')
+    setSaveStatus('idle')
     try {
       await subscriberApi.updatePreferences(selected)
-      setSaveMessage('저장되었습니다.')
+      setSaveStatus('success')
+      setTimeout(() => setSaveStatus('idle'), 2500)
     } catch {
-      setSaveMessage('저장에 실패했습니다.')
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 2500)
     } finally {
       setSaving(false)
     }
   }
 
   if (!me) {
-    return <div className="text-center py-20 text-stone-400">불러오는 중...</div>
+    return (
+      <div className="max-w-lg mx-auto space-y-8">
+        <div>
+          <div className="skeleton h-7 w-28 rounded-lg mb-2" />
+          <div className="skeleton h-4 w-48 rounded-md" />
+        </div>
+        <SkeletonCard />
+      </div>
+    )
   }
 
   return (
@@ -79,7 +91,7 @@ export default function MyPage() {
               <button
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
+                className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150 cursor-pointer ${
                   isSelected
                     ? CATEGORY_COLORS[cat]
                     : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'
@@ -90,32 +102,38 @@ export default function MyPage() {
             )
           })}
         </div>
-        <div className="flex items-center gap-4 pt-2">
+        <div className="flex items-center gap-3 pt-2">
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-6 py-2.5 rounded-xl bg-orange-400 text-white text-sm font-semibold hover:bg-orange-500 transition-colors disabled:opacity-60"
+            className="px-6 py-2.5 rounded-xl bg-orange-400 text-white text-sm font-semibold hover:bg-orange-500 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
           >
             {saving ? '저장 중...' : '저장하기'}
           </button>
-          {saveMessage && (
-            <span className="text-sm text-stone-500">{saveMessage}</span>
+          {saveStatus === 'success' && (
+            <span className="flex items-center gap-1.5 text-sm text-emerald-600 font-medium">
+              <CheckIcon className="w-4 h-4" />
+              저장되었습니다.
+            </span>
+          )}
+          {saveStatus === 'error' && (
+            <span className="text-sm text-red-500">저장에 실패했습니다.</span>
           )}
         </div>
       </section>
 
       <section className="bg-white rounded-2xl border border-stone-100 p-6 space-y-3">
         <h2 className="font-semibold text-stone-700">계정</h2>
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
           <button
             onClick={() => router.push('/saved')}
-            className="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-sm hover:bg-stone-50 transition-colors"
+            className="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-sm hover:bg-stone-50 transition-colors cursor-pointer"
           >
             저장한 문장 보기
           </button>
           <button
             onClick={logout}
-            className="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-sm hover:bg-stone-50 transition-colors"
+            className="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-sm hover:bg-stone-50 transition-colors cursor-pointer"
           >
             로그아웃
           </button>

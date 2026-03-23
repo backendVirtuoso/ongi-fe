@@ -7,6 +7,12 @@ import type { Quote } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { useAuth } from '@/contexts/AuthContext'
 import { quoteApi } from '@/lib/api'
+import {
+  HeartIcon,
+  HeartFilledIcon,
+  BookmarkIcon,
+  BookmarkFilledIcon,
+} from '@/components/icons'
 
 // bundle-dynamic-imports: 모달은 조건부로만 렌더링되므로 지연 로딩
 const MagicLinkModal = dynamic(() => import('@/components/MagicLinkModal'))
@@ -67,20 +73,21 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
           ${featured ? 'p-8 md:p-12' : 'p-6'}
         `}
       >
-        <span
-          className={`
-            inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4
-            ${CATEGORY_COLORS[quote.category]}
-          `}
-        >
-          {CATEGORY_LABELS[quote.category]}
-        </span>
-
-        {quote.sourceType === 'AI' && (
-          <span className="ml-2 inline-block text-xs font-semibold px-2 py-1 rounded-full bg-purple-100 text-purple-600 mb-4">
-            AI
+        <div className="flex items-center gap-2 mb-4">
+          <span
+            className={`
+              inline-block text-xs font-semibold px-3 py-1 rounded-full
+              ${CATEGORY_COLORS[quote.category]}
+            `}
+          >
+            {CATEGORY_LABELS[quote.category]}
           </span>
-        )}
+          {quote.sourceType === 'AI' && (
+            <span className="inline-block text-xs font-semibold px-2 py-1 rounded-full bg-purple-100 text-purple-600">
+              AI
+            </span>
+          )}
+        </div>
 
         <p
           className={`
@@ -92,25 +99,33 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
         </p>
 
         {showActions && (
-          <div className="flex items-center gap-4 mt-5 pt-4 border-t border-stone-50">
+          <div className="flex items-center gap-4 mt-5 pt-4 border-t border-stone-100">
             <button
               onClick={handleLike}
               disabled={loading === 'like'}
-              className={`flex items-center gap-1.5 text-sm transition-colors ${
-                quote.isLiked ? 'text-rose-500' : 'text-stone-400 hover:text-rose-400'
+              className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer disabled:opacity-50 ${
+                quote.isLiked ? 'text-rose-500 hover:text-rose-600' : 'text-stone-400 hover:text-rose-400'
               }`}
+              aria-label={quote.isLiked ? '좋아요 취소' : '좋아요'}
             >
-              <span>{quote.isLiked ? '❤️' : '🤍'}</span>
+              {quote.isLiked
+                ? <HeartFilledIcon className="w-4 h-4" />
+                : <HeartIcon className="w-4 h-4" />
+              }
               <span>{quote.likeCount}</span>
             </button>
             <button
               onClick={handleSave}
               disabled={loading === 'save'}
-              className={`flex items-center gap-1.5 text-sm transition-colors ${
-                quote.isSaved ? 'text-orange-500' : 'text-stone-400 hover:text-orange-400'
+              className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer disabled:opacity-50 ${
+                quote.isSaved ? 'text-orange-500 hover:text-orange-600' : 'text-stone-400 hover:text-orange-400'
               }`}
+              aria-label={quote.isSaved ? '저장 취소' : '저장하기'}
             >
-              <span>{quote.isSaved ? '🔖' : '📄'}</span>
+              {quote.isSaved
+                ? <BookmarkFilledIcon className="w-4 h-4" />
+                : <BookmarkIcon className="w-4 h-4" />
+              }
               <span>{quote.isSaved ? '저장됨' : '저장'}</span>
             </button>
           </div>
