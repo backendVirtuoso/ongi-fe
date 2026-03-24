@@ -39,6 +39,7 @@ export interface SubscriberMe {
   name: string | null
   status: string
   preferredCategories: Category[]
+  isAdmin: boolean
 }
 
 export interface TokenResponse {
@@ -60,6 +61,7 @@ export interface AIQuoteRequest {
 }
 
 export interface AIQuoteResponse {
+  quoteId?: number
   quote: string
   category: Category
   sourceType: string

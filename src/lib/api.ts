@@ -76,3 +76,4 @@ export const authApi = {
   verifyMagicLink: (token: string) =>
     api.get<ApiResponse<TokenResponse>>(`/auth/magic-link/verify?token=${token}`).then((r) => r.data),
 }
+
