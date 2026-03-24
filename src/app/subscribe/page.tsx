@@ -78,7 +78,7 @@ function SubscribeTab() {
         disabled={status === 'loading'}
         className="w-full py-3 rounded-xl bg-orange-400 hover:bg-orange-500 text-white font-semibold transition-colors duration-150 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
       >
-        {status === 'loading' ? '신청 중...' : '하루 두 번 온기 받기'}
+        {status === 'loading' ? '신청 중...' : '하루 두 번 토닥토닥 받기'}
       </button>
     </form>
   )
@@ -95,7 +95,7 @@ function UnsubscribeTab() {
     try {
       await subscriberApi.unsubscribe(email)
       setStatus('success')
-      setMessage('구독이 해지되었습니다. 그동안 온기를 함께해주셔서 감사합니다.')
+      setMessage('구독이 해지되었습니다. 그동안 토닥토닥을 함께해주셔서 감사합니다.')
     } catch (err: unknown) {
       setStatus('error')
       setMessage(
@@ -152,7 +152,7 @@ export default function SubscriptionPage() {
     <div className="max-w-md mx-auto py-12 space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-stone-800 mb-2">구독 설정</h1>
-        <p className="text-stone-500">온기 이메일 구독을 신청하거나 해지합니다.</p>
+        <p className="text-stone-500">토닥토닥 이메일 구독을 신청하거나 해지합니다.</p>
       </div>
 
       {/* 탭 */}

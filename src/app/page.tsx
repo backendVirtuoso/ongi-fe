@@ -37,7 +37,7 @@ export default function Home() {
           하루 두 번, 따뜻한 말 한마디
         </h1>
         <p className="text-stone-500 text-lg max-w-md mx-auto leading-relaxed">
-          위로·격려·응원 문장을 매일 아침 8시, 저녁 9시에 이메일로 전달해드려요.
+          위로·격려·응원 문장을 매일 아침 7시, 저녁 7시에 이메일로 전달해드려요.
         </p>
       </section>
 
@@ -63,7 +63,7 @@ export default function Home() {
       <section className="text-center space-y-4">
         <p className="text-stone-500">매일 아침·저녁, 따뜻한 문장을 이메일로 받아보세요.</p>
         <Link
-          href="/unsubscribe"
+          href="/subscribe"
           className="inline-block px-8 py-3.5 rounded-xl bg-orange-400 text-white font-semibold hover:bg-orange-500 transition-colors duration-150 cursor-pointer shadow-sm hover:shadow-md"
         >
           이메일 구독 신청하기

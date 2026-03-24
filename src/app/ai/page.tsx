@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 import { quoteApi } from '@/lib/api'
 import type { AIQuoteResponse, Category } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { useAuth } from '@/contexts/AuthContext'
-import { SparklesIcon, CopyIcon, CheckIcon, BookmarkIcon } from '@/components/icons'
+import { SparklesIcon, CopyIcon, CheckIcon, BookmarkIcon, BookmarkFilledIcon } from '@/components/icons'
 
 // bundle-dynamic-imports: 모달은 조건부로만 렌더링되므로 지연 로딩
 const MagicLinkModal = dynamic(() => import('@/components/MagicLinkModal'))
@@ -23,7 +23,7 @@ const CATEGORY_COLORS: Record<Category, string> = {
   LOVE: 'border-pink-300 bg-pink-50 text-pink-600',
 }
 
-export default function AIQuotePage() {
+export default function AIPage() {
   const { isLoggedIn } = useAuth()
   const pathname = usePathname()
   const [situation, setSituation] = useState('')
@@ -33,6 +33,13 @@ export default function AIQuotePage() {
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
+  const [savingQuote, setSavingQuote] = useState(false)
+
+  // 다른 탭에서 로그인 완료 시 모달 자동 닫기
+  useEffect(() => {
+    if (isLoggedIn && showModal) setShowModal(false)
+  }, [isLoggedIn]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault()
@@ -44,6 +51,7 @@ export default function AIQuotePage() {
     setLoading(true)
     setError('')
     setResult(null)
+    setIsSaved(false)
     try {
       const res = await quoteApi.generateAI({ situation, category })
       setResult(res.data)
@@ -62,6 +70,22 @@ export default function AIQuotePage() {
     await navigator.clipboard.writeText(result.quote)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleSave() {
+    if (!result) return
+    if (!isLoggedIn) {
+      setShowModal(true)
+      return
+    }
+    if (!result.quoteId || savingQuote) return
+    setSavingQuote(true)
+    try {
+      const res = await quoteApi.toggleSave(result.quoteId)
+      setIsSaved(res.data.isSaved)
+    } finally {
+      setSavingQuote(false)
+    }
   }
 
   return (
@@ -141,7 +165,7 @@ export default function AIQuotePage() {
               {result.quote}
             </p>
 
-            <div className="flex items-center gap-3 pt-2 border-t border-stone-100">
+            <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-stone-100">
               <button
                 onClick={handleCopy}
                 className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer ${
@@ -154,13 +178,19 @@ export default function AIQuotePage() {
                 }
                 <span>{copied ? '복사됨' : '복사'}</span>
               </button>
-              {!isLoggedIn && (
+              {result.quoteId && (
                 <button
-                  onClick={() => setShowModal(true)}
-                  className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-orange-500 transition-colors duration-150 cursor-pointer"
+                  onClick={handleSave}
+                  disabled={savingQuote}
+                  className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer disabled:opacity-50 ${
+                    isSaved ? 'text-orange-500 hover:text-orange-600' : 'text-stone-400 hover:text-orange-500'
+                  }`}
                 >
-                  <BookmarkIcon className="w-4 h-4" />
-                  <span>저장하기</span>
+                  {isSaved
+                    ? <BookmarkFilledIcon className="w-4 h-4" />
+                    : <BookmarkIcon className="w-4 h-4" />
+                  }
+                  <span>{isSaved ? '저장됨' : '저장하기'}</span>
                 </button>
               )}
             </div>
