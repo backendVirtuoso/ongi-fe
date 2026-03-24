@@ -2,13 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { SunIcon, MenuIcon, XIcon } from '@/components/icons'
 
 const NAV_LINKS = [
   { href: '/gallery', label: '문장 모아보기' },
-  { href: '/ai-quote', label: 'AI 문장' },
+  { href: '/ai', label: 'AI 문장' },
 ]
 
 const AUTH_NAV_LINKS = [
@@ -17,9 +17,13 @@ const AUTH_NAV_LINKS = [
 ]
 
 export default function Header() {
-  const { isLoggedIn, email, logout } = useAuth()
+  const { isLoggedIn, isAdmin, email, logout } = useAuth()
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  const showLoggedIn = mounted && isLoggedIn
 
   const skipReturnTo = ['/login', '/auth/callback']
   const loginHref = skipReturnTo.includes(pathname)
@@ -41,7 +45,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 text-orange-400 hover:text-orange-500 transition-colors cursor-pointer">
           <SunIcon className="w-5 h-5" />
-          <span className="text-lg font-bold tracking-tight">온기</span>
+          <span className="text-lg font-bold tracking-tight">토닥토닥</span>
         </Link>
 
         {/* Desktop nav */}
@@ -51,13 +55,18 @@ export default function Header() {
               {label}
             </Link>
           ))}
-          {isLoggedIn ? (
+          {showLoggedIn ? (
             <>
               {AUTH_NAV_LINKS.map(({ href, label }) => (
                 <Link key={href} href={href} className={navLinkClass(href)}>
                   {label}
                 </Link>
               ))}
+              {isAdmin && (
+                <Link href="/admin" className={navLinkClass('/admin')}>
+                  어드민
+                </Link>
+              )}
               <button
                 onClick={logout}
                 className="text-stone-400 hover:text-stone-600 transition-colors text-xs cursor-pointer"
@@ -68,7 +77,7 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/unsubscribe" className={navLinkClass('/unsubscribe')}>
+              <Link href="/subscribe" className={navLinkClass('/subscribe')}>
                 구독 설정
               </Link>
               <Link
@@ -108,7 +117,7 @@ export default function Header() {
               {label}
             </Link>
           ))}
-          {isLoggedIn ? (
+          {showLoggedIn ? (
             <>
               {AUTH_NAV_LINKS.map(({ href, label }) => (
                 <Link
@@ -124,6 +133,19 @@ export default function Header() {
                   {label}
                 </Link>
               ))}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMenuOpen(false)}
+                  className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
+                    isActive('/admin')
+                      ? 'bg-orange-50 text-orange-600 font-semibold'
+                      : 'text-stone-600 hover:bg-stone-50'
+                  }`}
+                >
+                  어드민
+                </Link>
+              )}
               <button
                 onClick={() => { logout(); setMenuOpen(false) }}
                 className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition-colors cursor-pointer"
@@ -134,10 +156,10 @@ export default function Header() {
           ) : (
             <>
               <Link
-                href="/unsubscribe"
+                href="/subscribe"
                 onClick={() => setMenuOpen(false)}
                 className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
-                  isActive('/unsubscribe')
+                  isActive('/subscribe')
                     ? 'bg-orange-50 text-orange-600 font-semibold'
                     : 'text-stone-600 hover:bg-stone-50'
                 }`}

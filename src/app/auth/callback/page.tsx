@@ -30,8 +30,12 @@ function AuthCallbackContent() {
         const returnTo = authStorage.getReturnTo() ?? '/mypage'
         authStorage.clearReturnTo()
         setStatus('success')
-        setMessage('로그인되었습니다.')
-        setTimeout(() => router.replace(returnTo), 800)
+        setMessage(returnTo)
+        setTimeout(() => {
+          window.close()
+          // window.close()가 작동하지 않는 경우 (보안 제한) returnTo로 이동
+          router.replace(returnTo)
+        }, 1200)
       })
       .catch((err) => {
         setStatus('error')
@@ -53,8 +57,11 @@ function AuthCallbackContent() {
         <>
           <p className="text-5xl">✨</p>
           <h1 className="text-2xl font-bold text-stone-800">로그인 완료!</h1>
-          <p className="text-stone-500">{message}</p>
-          <p className="text-stone-400 text-sm">이전 페이지로 이동합니다...</p>
+          <p className="text-stone-500">로그인되었습니다.</p>
+          <p className="text-stone-400 text-sm">
+            이 탭을 닫고 이전 탭으로 돌아가세요.<br />
+            탭이 자동으로 닫히지 않으면 직접 닫아주세요.
+          </p>
         </>
       )}
       {status === 'error' && (
