@@ -99,7 +99,7 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
         </p>
 
         {showActions && (
-          <div className="flex items-center gap-4 mt-5 pt-4 border-t border-stone-100">
+          <div className="mt-5 pt-4 border-t border-stone-100 flex items-center gap-4">
             <button
               onClick={handleLike}
               disabled={loading === 'like'}
