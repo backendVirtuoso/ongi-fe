@@ -68,6 +68,7 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
     <>
       <div
         className={`
+          flex flex-col h-full
           rounded-2xl bg-white border border-stone-100 shadow-sm
           hover:shadow-md transition-shadow duration-200
           ${featured ? 'p-8 md:p-12' : 'p-6'}
@@ -91,7 +92,7 @@ export default function QuoteCard({ quote: initialQuote, featured = false, showA
 
         <p
           className={`
-            text-stone-700 leading-relaxed font-medium
+            flex-1 text-stone-700 leading-relaxed font-medium
             ${featured ? 'text-xl md:text-2xl' : 'text-base'}
           `}
         >

@@ -46,23 +46,48 @@ export default function GalleryPage() {
 
       <GalleryGrid quotes={quotes} loading={loading} />
 
-      {!loading && totalPages > 1 && (
-        <div className="flex justify-center gap-2 pt-4">
-          {Array.from({ length: totalPages }).map((_, i) => (
+      {!loading && totalPages > 1 && (() => {
+        const PAGE_WINDOW = 10
+        const half = Math.floor(PAGE_WINDOW / 2)
+        const startPage = Math.max(0, Math.min(page - half, totalPages - PAGE_WINDOW))
+        const endPage = Math.min(totalPages - 1, startPage + PAGE_WINDOW - 1)
+        return (
+          <div className="flex justify-center items-center gap-2 pt-4">
             <button
-              key={i}
-              onClick={() => setPage(i)}
-              className={`w-8 h-8 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                page === i
-                  ? 'bg-orange-400 text-white'
-                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
-              }`}
+              onClick={() => setPage(Math.max(0, page - 1))}
+              disabled={page === 0}
+              className="w-8 h-8 rounded-full text-sm font-medium transition-colors cursor-pointer bg-stone-100 text-stone-600 hover:bg-stone-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="이전 페이지"
             >
-              {i + 1}
+              ‹
             </button>
-          ))}
-        </div>
-      )}
+            {Array.from({ length: endPage - startPage + 1 }).map((_, i) => {
+              const pageIndex = startPage + i
+              return (
+                <button
+                  key={pageIndex}
+                  onClick={() => setPage(pageIndex)}
+                  className={`w-8 h-8 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                    page === pageIndex
+                      ? 'bg-orange-400 text-white'
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                  }`}
+                >
+                  {pageIndex + 1}
+                </button>
+              )
+            })}
+            <button
+              onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
+              disabled={page === totalPages - 1}
+              className="w-8 h-8 rounded-full text-sm font-medium transition-colors cursor-pointer bg-stone-100 text-stone-600 hover:bg-stone-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="다음 페이지"
+            >
+              ›
+            </button>
+          </div>
+        )
+      })()}
     </div>
   )
 }
