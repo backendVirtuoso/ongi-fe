@@ -36,7 +36,7 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl font-bold text-stone-800 leading-tight">
           하루 두 번, 따뜻한 말 한마디
         </h1>
-        <p className="text-stone-500 text-lg max-w-md mx-auto leading-relaxed">
+        <p className="text-stone-500 text-lg mx-auto leading-relaxed">
           위로·격려·응원 문장을 매일 아침 7시, 저녁 7시에 이메일로 전달해드려요.
         </p>
       </section>
