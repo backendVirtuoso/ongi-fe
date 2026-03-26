@@ -8,7 +8,7 @@ import { SunIcon, MenuIcon, XIcon } from '@/components/icons'
 
 const NAV_LINKS = [
   { href: '/gallery', label: '문장 모아보기' },
-  { href: '/ai', label: 'AI 문장' },
+  // { href: '/ai', label: 'AI 문장' },
 ]
 
 const AUTH_NAV_LINKS = [
