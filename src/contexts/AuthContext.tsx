@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useCallback, useMemo, useEffect, useState, ReactNode } from 'react'
 import { authStorage } from '@/lib/auth'
-import { subscriberApi } from '@/lib/api'
+import { authApi, subscriberApi } from '@/lib/api'
 
 interface AuthState {
   isLoggedIn: boolean
@@ -86,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
+    authApi.logout().catch(() => {}) // 실패해도 클라이언트는 로그아웃
     authStorage.clear()
     setState({ isLoggedIn: false, subscriberId: null, email: null, isAdmin: null })
   }, [])
