@@ -10,6 +10,9 @@ const geist = Geist({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: '토닥토닥',
   description: '하루 두 번, 따뜻한 말 한마디. 위로·격려·응원 문장을 이메일로 받아보세요.',
+  icons: {
+    icon: '/logo.png',
+  },
   openGraph: {
     title: '토닥토닥',
     description: '하루 두 번, 따뜻한 말 한마디',
