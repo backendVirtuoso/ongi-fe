@@ -1,14 +1,15 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { SunIcon, MenuIcon, XIcon } from '@/components/icons'
+import { MenuIcon, XIcon } from '@/components/icons'
 
 const NAV_LINKS = [
   { href: '/gallery', label: '문장 모아보기' },
-  { href: '/ai', label: 'AI 문장' },
+  // { href: '/ai', label: 'AI 문장' },
 ]
 
 const AUTH_NAV_LINKS = [
@@ -33,10 +34,9 @@ export default function Header() {
   const isActive = (href: string) => pathname === href
 
   const navLinkClass = (href: string) =>
-    `transition-colors duration-150 cursor-pointer ${
-      isActive(href)
-        ? 'text-stone-900 font-semibold'
-        : 'text-stone-500 hover:text-stone-900'
+    `transition-colors duration-150 cursor-pointer ${isActive(href)
+      ? 'text-stone-900 font-semibold'
+      : 'text-stone-500 hover:text-stone-900'
     }`
 
   return (
@@ -44,7 +44,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 text-orange-400 hover:text-orange-500 transition-colors cursor-pointer">
-          <SunIcon className="w-5 h-5" />
+          <Image src="/logo.png" alt="토닥토닥 로고" width={30} height={30} className="w-5 h-5" />
           <span className="text-lg font-bold tracking-tight">토닥토닥</span>
         </Link>
 
@@ -108,11 +108,10 @@ export default function Header() {
               key={href}
               href={href}
               onClick={() => setMenuOpen(false)}
-              className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
-                isActive(href)
+              className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${isActive(href)
                   ? 'bg-orange-50 text-orange-600 font-semibold'
                   : 'text-stone-600 hover:bg-stone-50'
-              }`}
+                }`}
             >
               {label}
             </Link>
@@ -124,11 +123,10 @@ export default function Header() {
                   key={href}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
-                    isActive(href)
+                  className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${isActive(href)
                       ? 'bg-orange-50 text-orange-600 font-semibold'
                       : 'text-stone-600 hover:bg-stone-50'
-                  }`}
+                    }`}
                 >
                   {label}
                 </Link>
@@ -137,11 +135,10 @@ export default function Header() {
                 <Link
                   href="/admin"
                   onClick={() => setMenuOpen(false)}
-                  className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
-                    isActive('/admin')
+                  className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${isActive('/admin')
                       ? 'bg-orange-50 text-orange-600 font-semibold'
                       : 'text-stone-600 hover:bg-stone-50'
-                  }`}
+                    }`}
                 >
                   어드민
                 </Link>
@@ -158,11 +155,10 @@ export default function Header() {
               <Link
                 href="/subscribe"
                 onClick={() => setMenuOpen(false)}
-                className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${
-                  isActive('/subscribe')
+                className={`block px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer ${isActive('/subscribe')
                     ? 'bg-orange-50 text-orange-600 font-semibold'
                     : 'text-stone-600 hover:bg-stone-50'
-                }`}
+                  }`}
               >
                 구독 설정
               </Link>

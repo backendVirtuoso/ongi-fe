@@ -14,6 +14,10 @@ export const authStorage = {
     return localStorage.getItem(TOKEN_KEY)
   },
 
+  saveToken(accessToken: string) {
+    localStorage.setItem(TOKEN_KEY, accessToken)
+  },
+
   getSubscriberId(): number | null {
     const id = localStorage.getItem(SUBSCRIBER_ID_KEY)
     return id ? Number(id) : null

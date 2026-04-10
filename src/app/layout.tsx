@@ -10,6 +10,9 @@ const geist = Geist({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: '토닥토닥',
   description: '하루 두 번, 따뜻한 말 한마디. 위로·격려·응원 문장을 이메일로 받아보세요.',
+  icons: {
+    icon: '/logo.png',
+  },
   openGraph: {
     title: '토닥토닥',
     description: '하루 두 번, 따뜻한 말 한마디',
@@ -29,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="max-w-5xl mx-auto px-6 py-8 text-center text-xs text-stone-400">
               © 2026 토닥토닥 · 하루 두 번, 따뜻한 말 한마디
               <br /><br />
-              <Link href="https://forms.gle/qBFE5oEABh1NQAqeA" className="hover:underline">
+              <Link href="https://forms.gle/ayiKgKtQsXzZ1UaTA" className="hover:underline">
                 서비스 문의하기
               </Link>
             </div>
