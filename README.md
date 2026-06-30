@@ -223,4 +223,4 @@ adminApiClient.getSendHistory(page, size)    // 발송 이력
 
 ## 관련 레포지토리
 
-- **Backend**: [ongi-be](https://github.com/) — Spring Boot 4 + Java 21 + MySQL + Redis + Kafka
+- **Backend**: [ongi-be](https://github.com/ongi-be) — Spring Boot 4 + Java 21 + MySQL + Redis + Kafka
